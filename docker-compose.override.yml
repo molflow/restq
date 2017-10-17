@@ -2,11 +2,9 @@ version: '3.3'
 services:
   relaxq:
     build: ./relaxq/
+    environment:
+      - "DEBUG=1"
   ui:
     build: ./ui/
-  db:
-    environment:
-      - "MYSQL_ROOT_PASSWORD=empty"
   gateway:
     build: ./gateway/
-
