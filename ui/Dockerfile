@@ -1,3 +1,9 @@
+from node:latest
+copy  . /source
+workdir /source
+run npm install
+run npm run build
+
 from httpd:latest
-copy ./build/ /usr/local/apache2/htdocs/
+copy --from=0 /source/build/ /usr/local/apache2/htdocs/
 expose 80

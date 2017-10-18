@@ -1,7 +1,31 @@
+sudo: required
+
 language: python
+
 python:
     - "3.5"
+
+services:
+    - docker
+
+addons:
+    apt:
+        packages:
+            - docker-ce
+
+pre_install:
+    - docker --version
+    - docker-compose --version
+
 install:
     - pip install tox
+
 script:
-    - tox -c relaxq/tox.ini
+    - tox -c restq/tox.ini
+    - docker-compose build
+
+after_success:
+    - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker-compose push;
+      fi
