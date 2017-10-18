@@ -13,6 +13,10 @@ addons:
         packages:
             - docker-ce
 
+pre_install:
+    - docker --version
+    - docker-compose --version
+
 install:
     - pip install tox
 
