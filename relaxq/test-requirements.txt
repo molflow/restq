@@ -4,10 +4,14 @@
 #
 #    pip-compile --output-file test-requirements.txt test-requirements.in
 #
+certifi==2017.7.27.1      # via requests
+chardet==3.0.4            # via requests
 click==6.7                # via flask
-coverage==4.4.1           # via pytest-cov
+coverage==4.4.1           # via coveralls, pytest-cov
+coveralls==1.2.0
+docopt==0.6.2             # via coveralls
 flask==0.12.2
-funcsigs==1.0.2           # via mock
+idna==2.6                 # via requests
 itsdangerous==0.24        # via flask
 jinja2==2.9.6             # via flask
 markupsafe==1.0           # via jinja2
@@ -19,5 +23,7 @@ pytest-cov==2.5.1
 pytest-flask==0.10.0
 pytest==3.2.3
 rabbitpy==1.0.0
+requests==2.18.4          # via coveralls
 six==1.11.0               # via mock
+urllib3==1.22             # via requests
 werkzeug==0.12.2          # via flask, pytest-flask
