@@ -1,7 +1,33 @@
+sudo: required
+
 language: python
+
 python:
     - "3.5"
+
+services:
+    - docker
+
+addons:
+    apt:
+        packages:
+            - docker-ce
+
 install:
-    - pip install tox
+    - gem install coveralls-lcov
+    - pip install tox coveralls
+    - cd ${TRAVIS_BUILD_DIR}/ui; npm --quiet install
+
 script:
-    - tox -c relaxq/tox.ini
+    - cd ${TRAVIS_BUILD_DIR}/ui; npm run lint
+    - cd ${TRAVIS_BUILD_DIR}/ui; npm run test
+    - cd ${TRAVIS_BUILD_DIR}/restq; tox -c restq/tox.ini
+    - docker-compose build
+
+after_success:
+    - coveralls-lcov -v -n ${TRAVIS_BUILD_DIR}/ui/coverage/lcov.info > ${TRAVIS_BUILD_DIR}/coverage.json
+    - cd ${TRAVIS_BUILD_DIR}/restq; coveralls --merge=${TRAVIS_BUILD_DIR}/coverage.json
+    - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker-compose push;
+      fi

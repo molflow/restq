@@ -1,10 +1,12 @@
-version: '3.3'
+version: '3.2'
 services:
-  relaxq:
-    build: ./relaxq/
+  restq:
+    build: ./restq/
     environment:
       - "DEBUG=1"
   ui:
     build: ./ui/
   gateway:
     build: ./gateway/
+    ports:
+      - "127.0.0.1:80:80"

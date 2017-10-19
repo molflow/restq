@@ -1,0 +1,6 @@
+.tox
+.coverage
+.result.xml
+coverage.xml
+result.xml
+__pycache__
