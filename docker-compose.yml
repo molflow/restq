@@ -8,3 +8,5 @@ services:
     image: rabbitmq:latest
   gateway:
     image: molflow/restq-gw:latest
+    ports:
+      - "0.0.0.0:80:80"
