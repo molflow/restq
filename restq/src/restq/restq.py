@@ -20,6 +20,13 @@ def get_channel():
         channel = g.channel = get_connection().channel()
     return channel
 
+def get_queue_settings():
+    args = {
+        'x-expires': 604800000,  # 1 week
+        'x-max-length-bytes': 1000000,  # ~1Mb
+    }
+    return args
+
 
 @app.teardown_appcontext
 def close_rabbit(error):
@@ -31,29 +38,37 @@ def close_rabbit(error):
 
 @app.route("/", methods=['POST'])
 def create_queue():
-    if request.method == 'POST':
-        channel = get_channel()
-        name = uuid.uuid4()
-        queue = rabbitpy.Queue(channel, str(name))
-        queue.declare()
+    channel = get_channel()
+    name = uuid.uuid4()
+    queue = rabbitpy.Queue(
+         channel,
+         name=str(name),
+         durable=True,
+         arguments=get_queue_settings()
+    )
+    queue.declare()
     return jsonify(queue=str(name))
 
 
 @app.route("/<project>", methods=['GET', 'PUT'])
 def putget(project):
     channel = get_channel()
+    properties = {'delivery_mode': 2}
     if request.method == 'PUT':
         job = request.get_json()
-        message = rabbitpy.Message(channel, job)
+        message = rabbitpy.Message(channel, job, properties=properties)
         message.publish('', project)
         data = job
 
     if request.method == 'GET':
         queue = rabbitpy.Queue(channel, project)
-        message = queue.get()
+        try:
+            message = queue.get()
+        except rabbitpy.exceptions.AMQPNotFound:
+            return "", 204
         if message is not None:
             data = message.json()
             message.ack()
         else:
-            return jsonify({}), 204
+            return "", 204
     return jsonify(data)

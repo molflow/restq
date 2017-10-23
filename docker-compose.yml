@@ -6,7 +6,13 @@ services:
     image: molflow/restq-ui:latest
   rabbitmq:
     image: rabbitmq:latest
+    volumes:
+      - "queues:/var/lib/rabbitmq/"
+    environment:
+      - "RABBITMQ_NODENAME: node@rabbitmq"
   gateway:
     image: molflow/restq-gw:latest
     ports:
       - "0.0.0.0:80:80"
+volumes:
+  queues:

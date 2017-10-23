@@ -1,6 +1,7 @@
 from unittest.mock import patch, Mock
 import json
 import pytest
+import rabbitpy
 from restq.restq import app as myapp
 from restq.restq import get_connection, get_channel, close_rabbit
 
@@ -37,6 +38,16 @@ def test_project_get_empty(queue, channel, client):
     queue.return_value = msg
     resp = client.get('/hash_321')
     queue.get.ack.assert_not_called()
+    assert resp.status_code == 204
+
+
+@patch('restq.restq.get_channel')
+@patch('restq.restq.rabbitpy.Queue')
+def test_project_get_no_queue(queue, channel, client):
+    msg = Mock()
+    msg.get.side_effect = rabbitpy.exceptions.AMQPNotFound()
+    queue.return_value = msg
+    resp = client.get('/hash_321')
     assert resp.status_code == 204
 
 
