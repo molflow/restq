@@ -57,6 +57,7 @@ def test_project_get_data(queue, channel, client):
     data = {'job': 1}
     message_obj = Mock()
     message_obj.json.return_value = data
+    message_obj.properties = {}
     msg = Mock()
     msg.get.return_value = message_obj
     queue.return_value = msg

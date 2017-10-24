@@ -1,4 +1,5 @@
 import uuid
+from json import dumps, loads
 import rabbitpy
 from flask import Flask, request, jsonify, g
 
@@ -53,7 +54,10 @@ def create_queue():
 @app.route("/<project>", methods=['GET', 'PUT'])
 def putget(project):
     channel = get_channel()
-    properties = {'delivery_mode': 2}
+    properties = {
+        'delivery_mode': 2,
+        'message_id': str(uuid.uuid4())
+        }
     if request.method == 'PUT':
         job = request.get_json()
         message = rabbitpy.Message(channel, job, properties=properties)
@@ -67,7 +71,9 @@ def putget(project):
         except rabbitpy.exceptions.AMQPNotFound:
             return "", 204
         if message is not None:
-            data = message.json()
+            msg = message.json()
+            msg.update(message.properties)
+            data = loads(dumps(msg, default=lambda obj: str(obj)))
             message.ack()
         else:
             return "", 204
