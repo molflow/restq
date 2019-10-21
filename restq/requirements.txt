@@ -11,4 +11,4 @@ jinja2==2.9.6             # via flask
 markupsafe==1.0           # via jinja2
 pamqp==1.6.1              # via rabbitpy
 rabbitpy==1.0.0
-werkzeug==0.12.2          # via flask
+werkzeug==0.15.3          # via flask
