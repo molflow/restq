@@ -26,4 +26,4 @@ rabbitpy==1.0.0
 requests==2.18.4          # via coveralls
 six==1.11.0               # via mock
 urllib3==1.22             # via requests
-werkzeug==0.12.2          # via flask, pytest-flask
+werkzeug==0.15.3          # via flask, pytest-flask
