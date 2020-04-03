@@ -23,7 +23,7 @@ pytest-cov==2.5.1         # via -r test-requirements.in
 pytest-flask==0.10.0      # via -r test-requirements.in
 pytest==3.2.3             # via -r test-requirements.in, pytest-cov, pytest-flask
 rabbitpy==1.0.0           # via -r requirements.in
-requests==2.18.4          # via coveralls
+requests==2.20.0          # via coveralls
 six==1.11.0               # via mock
 urllib3==1.22             # via requests
 werkzeug==0.15.3          # via flask, pytest-flask
