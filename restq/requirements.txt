@@ -5,10 +5,10 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 click==6.7                # via flask
-flask==0.12.2
+flask==1.0                # via -r requirements.in
 itsdangerous==0.24        # via flask
-jinja2==2.9.6             # via flask
+jinja2==2.11.1            # via flask
 markupsafe==1.0           # via jinja2
 pamqp==1.6.1              # via rabbitpy
-rabbitpy==1.0.0
+rabbitpy==1.0.0           # via -r requirements.in
 werkzeug==0.15.3          # via flask
